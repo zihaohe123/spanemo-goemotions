@@ -7,6 +7,17 @@ class BertEMO(nn.Module):
         super(BertEMO, self).__init__()
         from transformers import AutoModel
         self.bert = AutoModel.from_pretrained('bert-base-uncased')
+
+        # for param in self.bert.parameters():
+        #     param.requires_grad = False
+        # n_layers = 12
+        # if nfinetune > 0:
+        #     for param in self.bert.pooler.parameters():
+        #         param.requires_grad = True
+        #     for i in range(n_layers-1, n_layers-1-nfinetune, -1):
+        #         for param in self.bert.encoder.layer[i].parameters():
+        #             param.requires_grad = True
+
         self.fc = nn.Linear(self.bert.config.hidden_size, 27)
 
     def forward(self, input_ids, attention_mask):

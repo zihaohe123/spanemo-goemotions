@@ -15,7 +15,7 @@ class GoEmotions(Dataset):
         print('Tokenizing....')
         from transformers import BertTokenizer
         tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-        encodings = tokenizer(texts, truncation=True, padding=True, return_tensors='pt')
+        encodings = tokenizer(texts, truncation=True, padding=True, return_tensors='pt', max_length=128)
         input_ids = encodings['input_ids']
         attention_masks = encodings['attention_mask']
         print('Done\n\n\n')

@@ -1,10 +1,10 @@
 import os
 
 if __name__ == '__main__':
-    batch_size = 8
+    batch_size = 80
     batch_size_eval = 2 * batch_size
     epochs = 30
-    lr = 1e-4
+    lr = 2e-4
     gpu = '0'   # which gpu to use
     n_workers = 4
     threshold = 0.5

@@ -28,7 +28,7 @@ class Trainer:
         model = BertEMO()
         model.to(device)
 
-        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=5e-4)
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4)
         criterion = nn.BCEWithLogitsLoss()
 
         self.args = args
@@ -84,7 +84,6 @@ class Trainer:
               f'Test F1s: {f1s}\n'
               f'Test Precisions: {precisions}\n'
               f'Test Recalls: {recalls}\n')
-
 
     def train_epoch(self):
         self.optimizer.zero_grad()
