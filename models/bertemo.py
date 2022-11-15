@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class BertEMO(nn.Module):
-    def __init__(self):
+    def __init__(self, mode='original'):
         super(BertEMO, self).__init__()
         from transformers import AutoModel
         self.bert = AutoModel.from_pretrained('bert-base-uncased')
@@ -17,8 +17,8 @@ class BertEMO(nn.Module):
         #     for i in range(n_layers-1, n_layers-1-nfinetune, -1):
         #         for param in self.bert.encoder.layer[i].parameters():
         #             param.requires_grad = True
-
-        self.fc = nn.Linear(self.bert.config.hidden_size, 27)
+        num_labels = {'original': 28, 'grouping': 4, 'ekman': 7}[mode]
+        self.fc = nn.Linear(self.bert.config.hidden_size, num_labels)
 
     def forward(self, input_ids, attention_mask):
         outputs = self.bert(input_ids, attention_mask=attention_mask, return_dict=True)

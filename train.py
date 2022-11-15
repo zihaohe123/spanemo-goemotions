@@ -14,6 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', type=str, default='0', help='which gpu to use')
     parser.add_argument('--n_workers', type=int, default=4, help='# of workers in dataloader.')
     parser.add_argument('--threshold', type=float, default=0.5, help='threshold to decide 0 or 1')
+    parser.add_argument('--mode', type=str, choices=('original', 'grouping', 'ekman'), default='original')
     parser.add_argument('--seed', type=int, default=2022)
 
     args = parser.parse_args()

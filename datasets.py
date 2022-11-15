@@ -5,11 +5,17 @@ import pandas as pd
 
 
 class GoEmotions(Dataset):
-    def __init__(self, phase='train'):
+    def __init__(self, phase='train', mode='original'):
         df = pd.read_csv(f'data/{phase}.tsv', sep='\t', header=None)
         print(f'{df.shape[0]} examples in the {phase} set!')
         texts = df.iloc[:, 0].tolist()
         labels = df.iloc[:, 1].tolist()
+        if mode == 'grouping':
+            # 0 ~ 3
+            labels
+        elif mode == 'ekman':
+            # 0 ~ 6
+            labels
 
         # tokenize the texts using BertTokenizer
         print('Tokenizing....')
@@ -23,13 +29,14 @@ class GoEmotions(Dataset):
         self.input_ids = input_ids
         self.attention_mask = attention_masks
         self.labels = labels
+        self.mode = mode
 
     def __len__(self):
         return len(self.input_ids)
 
     def __getitem__(self, index):
         # labels are like this
-        # there are 27 emotions in total
+        # there are 28 emotions in total
         # note that this is a multi-label classification
         # each input sentence may have multiple emotions
         # 1st example --> 4,26 --> this sentence contains emotion 4 and 26
@@ -42,8 +49,9 @@ class GoEmotions(Dataset):
         attention_mask = self.attention_mask[index]
         label = self.labels[index]
 
-        emotion_labels = [int(each)-1 for each in label.split(',')]  # (4,26) --> [4, 26]
-        label_encoding = np.zeros(27)
+        emotion_labels = [int(each) for each in label.split(',')]  # (4,26) --> [4, 26]
+        num_labels = {'original': 28, 'grouping': 4, 'ekman': 7}[self.mode]
+        label_encoding = np.zeros(num_labels)
         for each in emotion_labels:
             label_encoding[each] += 1
         label_encoding = torch.tensor(label_encoding, dtype=torch.float)
@@ -55,8 +63,8 @@ class GoEmotions(Dataset):
         return item
 
 
-def loader(phase, batch_size, n_workers=4):
-    dataset = GoEmotions(phase)
+def loader(phase, mode, batch_size, n_workers=4):
+    dataset = GoEmotions(phase, mode)
     shuffle = True if phase == 'train' else False
     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, num_workers=n_workers, pin_memory=True)
     return data_loader

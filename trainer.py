@@ -18,14 +18,14 @@ class Trainer:
 
         # Loading data
         print('#' * 10 + 'Train set' + '#' * 10)
-        train_laoder = loader('train', args.batch_size, args.n_workers)
+        train_laoder = loader('train', args.mode, args.batch_size, args.n_workers)
         print('#' * 10 + 'Dev set' + '#' * 10)
-        dev_laoder = loader('dev', args.batch_size_eval, args.n_workers)
+        dev_laoder = loader('dev', args.mode, args.batch_size_eval, args.n_workers)
         print('#' * 10 + 'Test set' + '#' * 10)
-        test_laoder = loader('test', args.batch_size_eval, args.n_workers)
+        test_laoder = loader('test', args.mode, args.batch_size_eval, args.n_workers)
 
         # Prepare model
-        model = BertEMO()
+        model = BertEMO(args.model)
         model.to(device)
 
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4)
